@@ -1,16 +1,16 @@
-import btree
-
-d= btree.Tree(btree.Node("deportes","deportes",1))
-
-d.insert_question("futbolista","Campbell")
-d.insert_question("futbolista","keylor navas")
-d.insert_question("futbolista","bryan ruiz" )
-d.insert_question("futbolista","Celso Borges")
-d.insert_question("exentrenador","pinto")
-d.insert_question("jugador de la liga","moreira",d.get("futbolista"))
-d.insert_question("jugador del twente","ugalde",d.get("futbolista"))
-d.print()
-print("\n\n\n\n\n\n")
-d.interchange_nodes(d.get("jugador de la liga"),d.get("futbolista"))
-d.print()
-#print(d.get_parent_of_node("futbolista")[1].key)
+import akinator
+import util
+if __name__ == '__main__':
+    game = akinator.Akinator()
+    game.load_data()
+    while True:
+        option = util.get_option_int("Bienvenido al juego de akinator\nSeleccione que acción desea ejecutar:",
+                            (1,"Jugar"),
+                            (2,"Ordenar elementos"),
+                            (3, "Salir"))
+        if option == 1:
+            game.game()
+        elif option == 2:
+            game.interchange_data()
+        elif option == 3:
+            break

@@ -1,5 +1,5 @@
-from btree_node import Node
-
+from btree_node import *
+import json
 
 class Tree:
     def __init__(self, node):
@@ -63,7 +63,14 @@ class Tree:
         if direction == 'D':
             parent_node.right = node
 
+    def insert_node_to_another(self,parent, child):
+        direction ,current_parent = self.get_parent_of_node(child.key)
+        self.insert_into_node(current_parent,None,direction)
+        self._insert(parent,child)
+
     def interchange_nodes(self, node1: Node, node2: Node):
+        if not node1 or not node2: raise Exception("interchange_nodes(): Nodes cannot be None")
+        if node1 == node2: return
         p1_dir, parent_node1 = self.get_parent_of_node(node1.key)
         p2_dir, parent_node2 = self.get_parent_of_node(node2.key)
         node = self.determine_orientation(node1, node2)
@@ -73,8 +80,8 @@ class Tree:
         else:
             if node == node1:
                 self.insert_into_node(parent_node1, node2, p1_dir)
-                self.insert_into_node(parent_node2, None,p2_dir)
-                self._insert(node2,node1)
+                self.insert_into_node(parent_node2, None, p2_dir)
+                self._insert(node2, node1)
             if node == node2:
                 self.insert_into_node(parent_node2, node1, p2_dir)
                 self.insert_into_node(parent_node1, None, p1_dir)
@@ -102,14 +109,21 @@ class Tree:
     def insert_question(self, question, answer, node=None):
         node_check = self.get(question)
         if not node_check:
-            question_node = Node(question, question, 2)
-            question_node.right = Node(answer, answer, 1)
+            question_node = Node(question, question, 2, QUESTION)
+            question_node.right = Node(answer, answer, 1, ANSWER)
             if node:
                 self._insert(node, question_node)
             else:
                 self.insert(question_node)
         else:
-            self._insert(node_check, Node(answer, answer, 1))
+            self._insert(node_check, Node(answer, answer, 1, ANSWER))
 
     def print(self):
-        return self.root.display()
+        x = str(json.dumps(self.root, indent=2, default=node_to_dict, ensure_ascii=False))
+        x = x.replace("{", "")
+        x = x.replace("}", "")
+        x = x.replace("\"", "")
+        x = x.replace(",", "")
+        x = x.replace("right", "derecha")
+        x = x.replace("left", "izquierda")
+        print(x)
